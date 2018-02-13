@@ -1,3 +1,5 @@
+> 因为github的markdown对数学公式mathjax不支持，所以建议到我的博客阅读：[排序算法](https://hushhw.cn/2018/02/13/11%E6%8E%92%E5%BA%8F/)
+
 # 排序算法
 
 之前也有总结排序部分，但是总是忘记，这段时间在整理算法笔记，所以借机再整理一份。
@@ -742,4 +744,269 @@ HeapAdjust() 耗时$logn$，共$n$次，故排序时间为$O(nlogn)$。
 堆排序是一种**不稳定**的排序方法。
 
 因为在堆的调整过程中，关键字进行比较和交换所走的是该结点到叶子结点的一条路径，因此对于相同的关键字就可能出现排在后面的关键字被交换到前面来的情况。
+
+
+
+## 7. 归并排序
+
+### 7.1 归并排序算法思想及代码实现
+
+归并排序是建立在归并操作上的一种有效的排序算法，该算法是采用**分治法（Divide and Conquer）**的一个非常典型的应用。
+
+将待排序序列R[0...n-1]看成是n个长度为1的有序序列，将相邻的有序表成对归并，得到n/2个长度为2的有序表；将这些有序序列再次归并，得到n/4个长度为4的有序序列；如此反复进行下去，最后得到一个长度为n的有序序列。
+
+综上可知：
+
+归并排序其实要做两件事：
+
+（1）“分解”——将序列每次**折半划分**。
+
+（2）“合并”——将划分后的序列段**两两合并后排序**。
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void Merge(vector<int> &input, int left, int mid, int right, vector<int> temp){
+	int i=left;
+	int j=mid+1;
+	int k=0;
+	while(i<=mid && j<=right){
+		if(input[i]<=input[j]){
+			temp[k++] = input[i++];
+		} else {
+			temp[k++] = input[j++];
+		}
+	}
+	while(i<=mid)
+		temp[k++]=input[i++];
+	while(j<=right)
+		temp[k++]=input[j++];
+	k=0;
+	while(left<=right){
+		input[left++] = temp[k++];
+		cout<<input[left-1]<<" ";
+	}
+	cout<<endl;
+}
+
+void MergeSort(vector<int> &input, int left, int right, vector<int> temp){
+	if(left<right){
+		int mid = (left+right)>>1;
+		MergeSort(input, left, mid, temp);
+		MergeSort(input, mid+1, right, temp);
+		Merge(input, left, mid ,right, temp);
+	}
+}
+
+int main(){
+	int arr[] = { 6, 4, 8, 9, 2, 3, 1};
+	vector<int> test(arr, arr + sizeof(arr) / sizeof(arr[0]));
+	cout << "排序前:";
+	for (int i = 0; i < test.size(); i++){
+		cout << test[i] << " ";
+	}
+	cout << endl;
+
+	vector<int> result = test;
+	vector<int> temp(result.size());// 在排序前，先建好一个长度等于原数组长度的临时数组，避免递归中频繁开辟空间
+	MergeSort(result, 0, result.size()-1, temp);
+
+	cout << "排序后:";
+	for (int i = 0; i < result.size(); i++){
+		cout << result[i] << " ";
+	}
+	cout << endl;
+	system("pause");
+	return 0;
+}
+```
+
+
+
+### 7.2 归并排序算法性能
+
+归并排序的时间复杂度分析：MergeSort()函数用于数组划分，Merge()函数用于合并。
+
+- 合并函数Merge()的时间复杂度为$O(n)$，因为代码中有2个长度为n的循环（非嵌套）
+- 划分函数MergeSort()中，简单的分析一下元素长度为n的归并排序所消耗的时间为T(n)：调用MergeSort()函数划分两部分，那每一小部分所花销的时间则是$T[\frac n2]$
+
+最后两部分合并:（用迭代法进行推导）
+$$
+\begin{align}
+T[n]& = 2T[\frac n2]+O(n)
+\\令：n=\frac n2\quad &=2(2T[\frac n4]+\frac n2)+n
+\\&=2^2T[\frac n{2^2}]+2n
+\\令：n=\frac n{2^2}\quad&=2^2(2T[\frac n{2^3}]+\frac n{2^2})+2n
+\\&=2^3T[\frac n{2^3}]+3n
+\\&……
+\\令：n=\frac n{2^{m-1}}\quad&=2^mT[1]+mn
+\\经过m次递归后，&当最后平分的不能再平分
+\\到最后得到T[1]时，&说明这个公式已经迭代完了（T[1]是常量了）
+\\得到：T[\frac n{2^m}]=T[1]\quad &==>\ n=2^m\quad ==>\ m=logn
+\\T[n]&=2^mT[1]+mn\qquad 其中m=logn；
+\\T[n]&=2^{logn}T[1]+nlogn
+\\&=nT[1]+nlogn
+\\&=n+nlogn
+\end{align}
+$$
+综上所述：归并排序时间复杂度为：$O(nlogn)$。
+
+因为不管元素在什么情况下都要做这些步骤，所以花销的时间是不变的，所以该算法的最优时间复杂度和最差时间复杂度及平均时间复杂度都是一样的为：$O(nlogn)$。
+
+归并排序的空间复杂度：
+
+归并的空间复杂度就是那个临时的数组和递归时压入栈的数据占用的空间：n+logn；所以空间复杂度为: O(n)
+
+归并排序的算法稳定度：
+
+在归并排序中，相等的元素的顺序不会改变，所以它是**稳定的**算法。
+
+
+
+## 8. 基数排序
+
+### 8.1 基数排序算法思想及代码实现
+
+基数排序是一种非比较型整数排序算法，其原理是将整数按位数切割成不同的数字，然后按每个位数分别比较。由于整数也可以表达字符串（比如名字或日期）和特定格式的浮点数，所以基数排序也不是只能使用于整数。
+
+算法步骤：
+
+- 将所有待比较数值（正整数）统一为同样的数位长度，数位较短的数前面补零。
+- 从最低位开始，依次进行一次排序。
+- 这样从最低位排序一直到最高位排序完成以后, 数列就变成一个有序序列。
+
+基数排序的方式可以采用 LSD（Least significant digital）或 MSD（Most significant digital），LSD 的排序方式由键值的最右边开始，而 MSD 则相反，由键值的最左边开始。
+
+不妨通过一个具体的实例来展示一下基数排序是如何进行的。 设有一个初始序列为: R {50, 123, 543, 187, 49, 30, 0, 2, 11, 100}。
+
+我们知道，任何一个阿拉伯数，它的各个位数上的基数都是以 0~9 来表示的，所以我们不妨把 0~9 视为 10 个桶。
+
+我们先根据序列的个位数的数字来进行分类，将其分到指定的桶中。例如：R[0] = 50，个位数上是 0，将这个数存入编号为 0 的桶中。
+
+![img](https://61mon.com/images/illustrations/Sort/10.png)
+
+分类后，我们在从各个桶中，将这些数按照从编号 0 到编号 9 的顺序依次将所有数取出来。这时，得到的序列就是个位数上呈递增趋势的序列。
+
+按照个位数排序： {50, 30, 0, 100, 11, 2, 123, 543, 187, 49}。
+
+接下来，可以对十位数、百位数也按照这种方法进行排序，最后就能得到排序完成的序列。
+
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// 求出数组中最大数的位数的函数
+int MaxBit(vector<int> input){
+	// 数组最大值
+	int max_data = input[0];
+	for (int i = 1; i < input.size(); i++){
+		if (input[i] > max_data){
+			max_data = input[i];
+		}
+	}
+	cout<<"max_data:"<<max_data<<endl;
+	// 数组最大值的位数
+	int bits_num = 0;
+	while (max_data){
+		bits_num++;
+		max_data /= 10;
+	}
+	cout<<"bits_num:"<<bits_num<<endl;
+	return bits_num;
+}
+
+vector<int> RadixSort(vector<int> input, int n){
+	vector<int> bucket(n);	//存储排序过程中的数据
+	vector<int> count(10);	//位计数器，从第0个元素到第9个元素依次用来记录当前比较位是0的有多少个...是9的有多少个数
+	int bits_num = MaxBit(input); //求出数组中最大数的位数的函数
+	int radix = 1;
+	// 从低位往高位循环
+	for (int d = 1; d <= bits_num; d++){ 
+		// 计数器清0
+		for (int i = 0; i < 10; i++){
+			count[i] = 0;
+		}
+ 
+		// 统计各个桶中的个数
+		for (int i = 0; i < n; i++){
+			int k=(input[i]/radix)%10;//取每个数字的末尾
+			count[k]++;
+		}
+		cout<<"before:";
+		for (int i = 0; i < n; i++){
+			cout<<count[i]<<" ";
+		}
+		cout<<endl;
+ 
+		cout<<"after:   ";
+		//索引重分配
+		for (int i = 1; i < 10; i++){
+			count[i] += count[i - 1];//count[i]表示第i个桶的右边界索引
+			cout<<count[i]<<" ";
+		}
+		cout<<endl;
+
+		//放入临时数组，从右到左扫描，保证排序稳定性
+		for (int i = n - 1; i >= 0; i--){
+			int k = (input[i]/radix)%10;
+			bucket[count[k] - 1] = input[i];
+			count[k]--;
+		}
+		cout<<"input:";
+		// 临时数组复制到 input 中
+		for (int i = 0; i < n; i++){
+			input[i] = bucket[i];
+			cout<<input[i]<<" ";
+		}
+		cout<<endl;
+		radix *= 10;
+	}
+ 
+	return input;
+}
+
+int main(){
+	int arr[] = { 50, 123, 543, 187, 49, 30, 0, 2, 11, 100 };
+	vector<int> test(arr, arr + sizeof(arr) / sizeof(arr[0]));
+	cout << "排序前:";
+	for (int i = 0; i < test.size(); i++){
+		cout << test[i] << " ";
+	}
+	cout << endl;
+
+	vector<int> result = test;
+	result = RadixSort(result, result.size());
+
+	cout << "排序后:";
+	for (int i = 0; i < result.size(); i++){
+		cout << result[i] << " ";
+	}
+	cout << endl;
+	system("pause");
+	return 0;
+}
+```
+
+
+
+### 8.2 基数排序算法性能
+
+基数排序的时间复杂度是$O(k⋅n)$，其中$n$是排序元素个数，$k$是最大的数字位数。
+
+空间复杂度是使用了两个临时的数组：10 + length；所以空间复杂度：$O(n)$
+
+在基数排序过程中，每次都是将当前位数上相同数值的元素统一“装桶”，并不需要交换位置。所以基数排序是**稳定**的算法。
+
+
+
+> 本文参考整理自：
+>
+> http://cuijiahua.com/blog/2018/01/alogrithm_9.html
+>
+> https://61mon.com/index.php/archives/193/
+>
+> http://www.cnblogs.com/jingmoxukong/p/4311237.html
 
