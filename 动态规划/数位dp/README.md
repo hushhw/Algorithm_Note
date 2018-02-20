@@ -167,3 +167,109 @@ int main(){
 
 ```
 
+
+
+### 【hdu 3555 Bomb】
+
+> 题意：
+> 统计1~n之间含有49的数字的个数(1 <= n <= 10000)\
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+
+int dp[10][10];
+
+
+void init(){
+	memset(dp, 0, sizeof(dp));
+	dp[0][0]=1;
+	for(int i=1; i<=5; i++){
+		for(int j=0; j<10; j++){
+			for(int k=0; k<10; k++){
+				if(!(j==4 && k==9))
+					dp[i][j] += dp[i-1][k];
+			}
+		}
+	}
+}
+
+int solve(int n){
+	init();
+	int num[10];
+	int ans=0;
+	int tot=1;
+	while(n){
+		num[tot++] = n%10;
+		n /= 10;
+	}
+	for(int i=tot; i>=1; i--){
+		for(int j=0; j<num[i]; j++){
+			if(!(j==9 && num[i+1]==4))
+				ans += dp[i][j];
+		}
+		if(num[i]==9 && num[i+1]==4)
+			break;
+	}
+	return ans;
+}
+
+int main(){
+	int n;
+	while(~scanf("%d",&n)){
+		cout<<n - solve(n)<<endl;
+	}
+	return 0;
+}
+```
+
+
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int N=20;
+int dp[N][10][2]; //dp[i][j][z],i表示当前位数，j表示上一位，istrue表示是否符合49
+int dig[N];
+
+int dfs(int pos, int pre, int istrue, int limit){
+	cout<<limit<<endl;
+	if(pos < 0) return istrue;
+	if(!limit && dp[pos][pre][istrue]!=-1)
+		return dp[pos][pre][istrue];
+	int last = limit? dig[pos]:9;
+	int ret = 0;
+	for(int i=0; i<=last; i++){
+		ret += dfs(pos-1, i, istrue || (pre==4 && i==9), limit && (i==last));
+	}
+	if(!limit){
+		dp[pos][pre][istrue] = ret;
+	}
+	return ret;
+}
+
+int solve(int n){
+	int len=0;
+	while(n){
+		dig[len++] = n%10;
+		n /= 10;
+	}
+	return dfs(len-1, 0, 0, 1); //从高位开始递归
+}
+
+int main(){
+	memset(dp, -1, sizeof(dp));
+	int T;
+	cin>>T;
+	while(T--){
+		int n;
+		cin>>n;
+		cout<<solve(n)<<endl;
+	}
+	return 0;
+}
+```
+
