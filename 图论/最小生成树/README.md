@@ -24,6 +24,37 @@
 
 ![这里写图片描述](http://img.blog.csdn.net/20160714144315409)
 
+```c++
+struct Edge{
+int from,to,val;
+bool operator < (const Edge &x)const{
+return val < x.val;
+}
+}e[MAXN * MAXN];
+
+int fa[MAXN],len=0;
+int find(int cur){
+    return cur==fa[cur]?cur:fa[cur]=find(fa[cur]);  
+}
+
+int kruskal()
+{
+    for(int i=0;i<n;i++) fa[i] = i;
+    sort(e,e+len);
+    int ans=0;
+    for(int i = 0;i < len;i++){
+        int rootx=find(e[i].from);
+        int rooty=find(e[i].to);
+        if(rootx==rooty) continue;
+        fa[rootx]=rooty;
+        ans += e[i].val;    
+    }
+    return ans;
+}
+```
+
+
+
 ## Prim算法
 
 Prim算法是一种产生最小生成树的算法。该算法于`1930`年由捷克数学家沃伊捷赫·亚尔尼克（英语：`Vojtěch Jarník`）发现；并在`1957`年由美国计算机科学家罗伯特·普里姆（英语：`Robert C. Prim`）独立发现；`1959`年，艾兹格·迪科斯彻再次发现了该算法。
@@ -40,9 +71,35 @@ Prim算法是一种产生最小生成树的算法。该算法于`1930`年由捷�
 
 ![这里写图片描述](http://img.blog.csdn.net/20160714161107576)
 
+```c++
+int prim()
+{
+int dis[MAXN];
+bool vis[MAXN]={0};
+for(int i=0;i<n;i++) dis[i] = INF;
+int cur = 0;
+dis[cur]=0;vis[cur]=true;
+for(int i=0;i<n;i++)
+{
+     for(int j=0;j<n;j++)
+        if(!vis[j] && dis[j] > map[cur][j])
+             dis[j] = map[cur][j];
 
+        int mini = INF;
+        for(int j=0;j<n;j++)
+            if(!vis[j] && dis[j] < mini)
+                mini = dis[cur = j];
+        vis[cur] = true;
+    }
+    int ans=0;
+    for(int i=0;i<n;i++) ans+=dis[i];
+    return ans;
+}
+```
 
 
 
  > 本文参考整理自：
  > 勿在浮沙筑高台http://blog.csdn.net/luoshixian099/article/details/51908175
+ >
+ > https://www.hrwhisper.me/algorithm-graph-dijkstra-spfa-bellmanford-prim-kruskal/#_MST
