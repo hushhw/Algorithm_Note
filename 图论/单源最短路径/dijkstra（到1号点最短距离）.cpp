@@ -51,7 +51,7 @@ int main(){
 		}
 	}
 
-	//输出1号点到个点距离
+	//输出1号点到各点距离
 	for(int i=1; i<=n; i++)
 		printf("%d ", dis[i]);
 	system("pause");

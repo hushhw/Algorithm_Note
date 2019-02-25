@@ -5,16 +5,16 @@ using namespace std;
 int division(vector<int> &list, int left, int right){
 	int base = list[left];
 	while(left < right){
-		while(left < right && list[right]>=base)//´ÓĞòºÅÓÒ¶Ë¿ªÊ¼Ïò×ó±éÀú£¬Ö±µ½ÕÒµ½Ğ¡ÓÚbaseµÄÊı
+		while(left < right && list[right]>=base)//ä»åºå·å³ç«¯å¼€å§‹å‘å·¦éå†ï¼Œç›´åˆ°æ‰¾åˆ°å°äºbaseçš„æ•°
 			right--;
-		list[left] = list[right];	//ÕÒµ½±ÈbaseĞ¡µÄÔªËØ£¬½«Õâ¸öÔªËØ·Åµ½×î×ó±ßµÄÎ»ÖÃ
-		while(left < right && list[left]<=base) //´ÓĞòºÅ×ó¶Ë¿ªÊ¼ÏòÓÒ±éÀú£¬Ö±µ½ÕÒµ½´óÓÚbaseµÄÊı
+		list[left] = list[right];	//æ‰¾åˆ°æ¯”baseå°çš„å…ƒç´ ï¼Œå°†è¿™ä¸ªå…ƒç´ æ”¾åˆ°æœ€å·¦è¾¹çš„ä½ç½®
+		while(left < right && list[left]<=base) //ä»åºå·å·¦ç«¯å¼€å§‹å‘å³éå†ï¼Œç›´åˆ°æ‰¾åˆ°å¤§äºbaseçš„æ•°
 			left++;
-		list[right] = list[left];	//ÕÒµ½±Èbase´óµÄÔªËØ£¬½«Õâ¸öÔªËØ·Åµ½×îÓÒ±ßµÄÎ»ÖÃ
+		list[right] = list[left];	//æ‰¾åˆ°æ¯”baseå¤§çš„å…ƒç´ ï¼Œå°†è¿™ä¸ªå…ƒç´ æ”¾åˆ°æœ€å³è¾¹çš„ä½ç½®
 	}
 
 	list[left] = base;
-	cout << "Ã¿Ò»ÂÖ£º";
+	cout << "æ¯ä¸€è½®ï¼š";
 	for (int i = 0; i < list.size(); i++){
 		cout << list[i] << " ";
 	}
@@ -23,17 +23,17 @@ int division(vector<int> &list, int left, int right){
 }
 
 void QuickSort(vector<int> &list, int left, int right){
-	if(left < right){	//×óÏÂ±êÒ»¶¨Ğ¡ÓÚÓÒÏÂ±ê£¬·ñÔòÔ½½ç
-		int base = division(list, left, right);//¶ÔÊı×é½øĞĞ·Ö¸î£¬È¥³ıÏÂ´Î·Ö¸îµÄ»ù×¼±êºÅ
-		QuickSort(list, left, base-1);//×ó
-		QuickSort(list, base+1, right);//ÓÒ
+	if(left < right){	//å·¦ä¸‹æ ‡ä¸€å®šå°äºå³ä¸‹æ ‡ï¼Œå¦åˆ™è¶Šç•Œ
+		int base = division(list, left, right);//å¯¹æ•°ç»„è¿›è¡Œåˆ†å‰²ï¼Œå»é™¤ä¸‹æ¬¡åˆ†å‰²çš„åŸºå‡†æ ‡å·
+		QuickSort(list, left, base-1);//å·¦
+		QuickSort(list, base+1, right);//å³
 	}
 }
 
 int main(){
 	int arr[] = { 6, 4, 8, 9, 2, 3, 1};
 	vector<int> test(arr, arr + sizeof(arr)/sizeof(arr[0]));
-	cout << "ÅÅĞòÇ°" << endl;
+	cout << "æ’åºå‰" << endl;
 	for (int i = 0; i < test.size(); i++){
 		cout << test[i] << " ";
 	}
@@ -42,7 +42,7 @@ int main(){
 
 	QuickSort(result, 0, result.size() - 1);
 
-	cout << "ÅÅĞòºó" << endl;
+	cout << "æ’åºå" << endl;
 	for (int i = 0; i < result.size(); i++){
 		cout << result[i] << " ";
 	}

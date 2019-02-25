@@ -1,18 +1,20 @@
 #include <iostream>
 #include <string>
 #include <queue>
+#include <cstdio>
+#include <cstring>
 const int inf=0x3f3f3f3f;
 const int MAXN=200+10;  
 using namespace std;
 
-int head[MAXN],len;		//¼ÇÂ¼Êı×é
-int dis[MAXN];		//disÓÃÀ´¼ÇÂ¼³õÊ¼µãµ½¸öµãµÄÎ»ÖÃ
-bool vis[MAXN];		//±ê¼ÇÊÇ·ñ±»·ÃÎÊ
-int n,m;			//n±íÊ¾¶¥µã¸öÊı£¬m±íÊ¾±ßµÄÌõÊı
+int head[MAXN],len;		//è®°å½•æ•°ç»„
+int dis[MAXN];		//disç”¨æ¥è®°å½•åˆå§‹ç‚¹åˆ°å„ç‚¹çš„ä½ç½®
+bool vis[MAXN];		//æ ‡è®°æ˜¯å¦è¢«è®¿é—®
+int n,m;			//nè¡¨ç¤ºé¡¶ç‚¹ä¸ªæ•°ï¼Œmè¡¨ç¤ºè¾¹çš„æ¡æ•°
 
 struct edge{
 	int to, val, next;
-}e[MAXN];
+}e[MAXN*2];
 
 void add(int from, int to, int val){
 	e[len].to=to;
@@ -23,14 +25,14 @@ void add(int from, int to, int val){
 
 struct point{
 	int val, id;
-	point(int id,int val):id(id),val(val){}
+	point(int id,int val):val(val),id(id){}
 	bool operator <(const point &x)const{
 		return val>x.val;
 	}
 };
 
 void dijkstra(int s){
-	memset(vis, 0, sizeof(vis));	//³õÊ¼»¯ÅĞ¶ÏÊı×é
+	memset(vis, 0, sizeof(vis));	//åˆå§‹åŒ–åˆ¤æ–­æ•°ç»„
 	for(int i=0; i<n; i++)
 		dis[i] = inf;
 	priority_queue<point> q;
@@ -62,7 +64,7 @@ int main(){
 			add(to, from, val);
 		}
 		int s,t;
-		scanf("%d%d",&s,&t); //ÊäÈëÆğµãºÍÖÕµã
+		scanf("%d%d",&s,&t); //è¾“å…¥èµ·ç‚¹å’Œç»ˆç‚¹
 		dijkstra(s);
 
 		if(dis[t]==inf)
