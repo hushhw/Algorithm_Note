@@ -1,4 +1,4 @@
-> 因为github的markdown对数学公式mathjax不支持，所以建议到我的博客阅读：[排序算法](https://hushhw.cn/2018/02/13/11%E6%8E%92%E5%BA%8F/)
+> 因为github的markdown对数学公式mathjax不支持，所以建议到我的博客阅读：[排序算法](https://hushhw.cn/posts/learn/61237.html)
 
 # 排序算法
 

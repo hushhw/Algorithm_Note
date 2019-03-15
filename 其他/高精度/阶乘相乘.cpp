@@ -18,8 +18,10 @@
 
 #include <iostream>
 #include <string>
+#include <cstdio>
 using namespace std;
 
+int N = 11;
 int a[10001]; //±£´æ½á¹û
 
 int main(){

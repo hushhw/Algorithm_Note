@@ -1,4 +1,4 @@
-> 原文：hushhw's blog——[并查集的使用及实现](https://hushhw.cn/2018/02/11/09%E5%B9%B6%E6%9F%A5%E9%9B%86/)
+> 原文：hushhw's blog——[并查集的使用及实现](https://hushhw.cn/posts/learn/f4151f32.html)
 
 # 并查集
 

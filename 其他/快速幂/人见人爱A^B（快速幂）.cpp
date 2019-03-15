@@ -10,7 +10,8 @@ Problem Description
 
 
 Input
-输入数据包含多个测试实例，每个实例占一行，由两个正整数A和B组成（1<=A,B<=10000），如果A=0, B=0，则表示输入数据的结束，不做处理。
+输入数据包含多个测试实例，每个实例占一行，由两个正整数A和B组成（1<=A,B<=10000），
+如果A=0, B=0，则表示输入数据的结束，不做处理。
 
 
 Output
@@ -70,7 +71,7 @@ ll mod_pow(ll x, ll n, ll mod){
 using namespace std;
 
 int main(){
-	int m,n,s,i;
+	int m,n,s;
 	while(scanf("%d%d",&m,&n)!=EOF && (m+n)){
 		s=1;
 		while(n>0){
@@ -99,6 +100,8 @@ int main(){
 	return 0;
 }
 */
+
+
 /* 高精度做法
 #include <iostream>
 #include <cstdio>

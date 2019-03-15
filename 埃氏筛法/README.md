@@ -1,5 +1,5 @@
 
-> 原文：hushhw's blog——[“埃氏筛法”思想运用](https://hushhw.cn/2018/02/03/07%E5%9F%83%E7%AD%9B/)
+> 原文：hushhw's blog——[“埃氏筛法”思想运用](https://hushhw.cn/posts/learn/d033fe5e.html)
 
 # 何为“埃氏筛法”
 
